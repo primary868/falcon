@@ -1,1 +1,8 @@
 2025-07-28: initial upload to github
+
+2026-06-12: complete refactor.
+- ffmpeg and ffprobe installs now auto-detected, instead of specifying exe path
+- takes folder of .flac files as input, instead of text file
+- variables can be used in output folder names:
+  - %A% = album artist
+  - %F% = converted output format

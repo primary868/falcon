@@ -1,0 +1,23 @@
+{
+  "out_types":{
+    "alac":{
+      "ext":"m4a",
+      "output_format":"-c:a alac -c:v copy",
+      "cover_func":"", 
+      "use_album_artist":false
+    },
+    "ipod":{
+      "ext":"m4a",
+      "output_format":"-c:a aac -b:a 256k -vn",
+      "cover_func":"cover_ipod",
+      "use_album_artist":true
+    },
+    "play":{
+      "ext":"mp3",
+      "output_format":"-c:a libmp3lame -vn -b:a 128k",
+      "cover_func":"cover_playdate",
+      "use_album_artist":true
+    }
+  },
+  "outfolder":"~/Desktop/%A%_%F%"
+}
