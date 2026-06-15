@@ -17,6 +17,12 @@
       "output_format":"-c:a libmp3lame -vn -b:a 128k",
       "cover_func":"cover_playdate",
       "use_album_artist":true
+    },
+    "stream":{
+      "ext":"mp3",
+      "output_format":"-c:a libmp3lame -b:a 128k -c:v copy",
+      "cover_func":"",
+      "use_album_artist":true
     }
   },
   "outfolder":"~/Desktop/%A%_%F%"
