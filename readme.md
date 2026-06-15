@@ -21,10 +21,11 @@ Conversion types (arguments for ffmpeg) are defined outside the script. In `./fa
 "play":{
   "ext":"mp3",
   "output_format":"-c:a libmp3lame -vn -b:a 128k",
-  "cover_func":"cover_playdate", // cover_playdate() exists in falcon to make a discrete album art image in the output.
-  "use_album_artist":true // Use source files' 'album artist' tag as infiles' 'artist' tag
+  "cover_func":"cover_playdate",
+  "use_album_artist":true
 }
 ```
-To convert to this format, the command would be: `falcon.py /path/to/input/folder play`
+- `cover_func`: Name of function **within falcon script** to make a discrete album art image in the output. The function should take `PIL.Image` image dta object as a function and handle saving the output image file. (Follow example functions at the top o the script)
+- `use_album_artist`: Use source files' 'album artist' tag as infiles' 'artist' tag
 
-To create a custom cover art image file, add a function to the script which takes `PIL.Image` data as input and saves an image. Two example functions are at the top of the source code: `cover_playdate` and `cover_ipod`.
+To use this example conversion type, the command would be: `falcon.py /path/to/input/folder play`

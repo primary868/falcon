@@ -15,9 +15,11 @@ def cover_ipod(img: Image):
 
 ######### Functions #########
 
-def run_command(cmd: list) -> int: return subprocess.run(cmd, check=True).returncode
+def run_command(cmd: list) -> int: 
+  if ARGS.show_command: print(' '.join(cmd))
+  return subprocess.run(cmd, check=True).returncode
 
-def make_cover_image() -> Image:
+def get_cover_img_data() -> Image:
   print("Getting source cover art")
   
   # look for cover.jpg
@@ -48,6 +50,16 @@ def album_artist_map() -> list:
   else: 
     print(f"Album artist is: '{album_artist}'")
     return['-metadata',f'artist={album_artist}']
+  
+def make_template_command() -> list:
+  print("=== Make base ffmpeg command ===")
+  cmd = ['ffmpeg','-loglevel','error','-hide_banner']
+  if ARGS.overwrite: cmd += ['-y']
+  cmd += ['-i',9] # 9 is replaced by flac file path during use
+  cmd += THIS['output_format'].split()
+  if THIS['use_album_artist']: cmd += album_artist_map()
+  # path to output file is tacked onto the end when the command is used
+  return cmd
 
 ######### Prereq #########
 
@@ -62,7 +74,8 @@ try:
   parser = argparse.ArgumentParser()
   parser.add_argument('infolder',help="folder of flac files to convert")
   parser.add_argument('out_type',choices=list(FLAGS.keys()),help="Type of conversion to perform")
-  parser.add_argument('--overwrite', '-y',action='store_true',help='Overwrite existing output files')
+  parser.add_argument('--overwrite','-y',action='store_true',help='Overwrite existing output files')
+  parser.add_argument('--show_command','-s',action='store_true',help='Show generated ffmpeg commands')
   ARGS = parser.parse_args()
   ARGS.infolder = os.path.expanduser(ARGS.infolder)
 
@@ -84,15 +97,10 @@ except Exception as e:
 try:
   if (func_name := THIS['cover_func']): 
     print("=== Make output cover art ===")
-    source_img = make_cover_image()
+    source_img = get_cover_img_data()
     globals().get(func_name)(source_img)
   
-  print("=== Make base ffmpeg command ===")
-  cmd = ['ffmpeg','-loglevel','error','-hide_banner']
-  if ARGS.overwrite: cmd += ['-y']
-  cmd += ['-i',9] # 9 is replaced by flac file path during use
-  cmd += THIS['output_format'].split()
-  if THIS['use_album_artist']: cmd += album_artist_map()
+  cmd = make_template_command()
   print("Command made.")
 
   print("=== Convert FLAC files ===")
