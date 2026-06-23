@@ -4,15 +4,19 @@ Written as an easy interface for ffmpeg, for converting flac into a few formats 
 
 # Usage
 ```
-falcon.py [-h] [--overwrite] infolder out_type
+usage: falcon.py [-h] [--overwrite] [--show_command] [--outfolder OUTFOLDER] infolder {...}
 
 positional arguments:
-  infolder          folder of flac files to convert
-  out_type          Type of conversion to perform; valid values come from falcon_config.json
+  infolder              folder of flac files to convert
+  {...}
+                        Type of conversion to perform
 
 options:
-  -h, --help        show this help message and exit
-  --overwrite, -y   Overwrite existing output files
+  -h, --help            show this help message and exit
+  --overwrite, -y       Overwrite existing output files
+  --show_command, -s    Show generated ffmpeg commands
+  --outfolder, -o OUTFOLDER
+                        Folder to place converted files. Makes it if it does not exist.
 ```
 
 # Defining Conversion Types

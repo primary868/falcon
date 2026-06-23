@@ -66,22 +66,24 @@ def make_template_command() -> list:
 try:
   for dep in ['ffmpeg','ffprobe']: assert shutil.which(dep), f"Dependency not found: {dep}"
   
-  with open('./falcon_config.json','r') as file:
+  with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"falcon_config.json"),'r') as file:
     data = json.load(file)
     FLAGS = data['out_types']
-    OUTFOLDER = data['outfolder']
+    OUTFOLDER = data['default_outfolder']
   
   parser = argparse.ArgumentParser()
   parser.add_argument('infolder',help="folder of flac files to convert")
   parser.add_argument('out_type',choices=list(FLAGS.keys()),help="Type of conversion to perform")
   parser.add_argument('--overwrite','-y',action='store_true',help='Overwrite existing output files')
   parser.add_argument('--show_command','-s',action='store_true',help='Show generated ffmpeg commands')
+  parser.add_argument('--outfolder','-o',help='Folder to place converted files. Makes it if it does not exist.')
   ARGS = parser.parse_args()
   ARGS.infolder = os.path.expanduser(ARGS.infolder)
 
   INFILES = glob.glob(os.path.join(ARGS.infolder,'*.flac'))
   assert INFILES, "No flac files found in input folder."
 
+  if ARGS.outfolder: OUTFOLDER = ARGS.outfolder
   OUTFOLDER = os.path.expanduser(OUTFOLDER).replace(r'%A%',os.path.basename(ARGS.infolder)).replace(r'%F%',ARGS.out_type)
   if not os.path.exists(OUTFOLDER): os.makedirs(OUTFOLDER)
   print(f"Saving to folder: {OUTFOLDER}")
